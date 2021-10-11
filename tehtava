@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tehtävä</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+import {useState} from "react";
+
+const URL = "http://api.exchangeratesapi.io/v1/latest?access_key=3cdcd1b7131bedabcc140a97321dd570"
+const API_KEY = "3cdcd1b7131bedabcc140a97321dd570"
+
+function App() {
+    const [eur,setEur] = useState(0);
+    const [gbp,setGbp] = useState(0);
+    const [rate,setRate] = useState(0);
+}
+
+
+return (
+    <div id="container">
+        <from onSubmit={convert}/>
+            <div>
+                <label>Eur</label>&nbsp;
+                <input type="number" step="0.01"
+                value={eur} onChange={e => setEur(e.target.value)} 
+                <output>{rate}</output>
+            </div>
+            <div>
+                <label>Gbp</label>
+                <output>{gbp.toFixed(2)} €</output>
+            </div>
+            <div>
+                <button>Calculate</button>
+            </div>
+        </from>
+    </div>
+);
+}
+
+async function convert(e) {
+    e.preventDefault();
+    try {
+        const address = URL + API_KEY;
+        const response = await fetch(address);
+
+        if (response.ok) {
+            const json = await response.json();
+            console.log(json.rates.GBP);
+            setRate(json.rates.GBP);
+
+            setGbp(eur * json.rates.GBP);
+        } else {
+            alert("Error retrieving exchange rate.");
+            console.log(response);
+        }
+    } catch (err) {
+        alert(err);
+    }
+}
+    ReactDOM.render(
+        <App />,
+        document.getElementById('root')
+      );
+
+</script>
+</body>
+</html>
